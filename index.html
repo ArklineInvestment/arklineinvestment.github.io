@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arkline Investment Pool</title>
+  <style>
+    body { font-family: Arial; padding: 40px; }
+    input { padding: 8px; margin-right: 10px; }
+    button { padding: 8px 16px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Check Your Investment</h1>
+  <input type="text" id="userCode" placeholder="Enter your code" />
+  <button onclick="checkShares()">Check</button>
+
+  <div id="result"></div>
+
+  <script>
+    let data = {};
+
+    async function loadData() {
+      const res = await fetch('data.json');
+      data = await res.json();
+    }
+
+    function checkShares() {
+      const code = document.getElementById('userCode').value.trim().toUpperCase();
+      const userShares = data.users[code];
+
+      if (userShares) {
+        const shareValue = (data.totalPoolValue / data.totalShares) * userShares;
+        document.getElementById('result').innerText =
+          `You hold ${userShares} shares. Current value: $${shareValue.toFixed(2)}.`;
+      } else {
+        document.getElementById('result').innerText = 'Invalid code. Please try again.';
+      }
+    }
+
+    loadData();
+  </script>
+
+</body>
+</html>
