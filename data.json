@@ -1,0 +1,9 @@
+{
+  "totalShares": 100000,
+  "totalPoolValue": 800000,
+  "users": {
+    "CODE123": 500,
+    "CODE456": 1000,
+    "CODE789": 750
+  }
+}
