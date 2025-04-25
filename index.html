@@ -3,34 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Arkline Investment Pool</title>
-  <style>
-    body { font-family: Arial; padding: 40px; }
-    input { padding: 8px; margin-right: 10px; }
-    button { padding: 8px 16px; }
-    #result { margin-top: 20px; font-weight: bold; }
-  </style>
 </head>
 <body>
-
-  <h1>Check Your Investment</h1>
+  <h2>Check Your Investment</h2>
   <input type="text" id="userCode" placeholder="Enter your code" />
   <button onclick="checkShares()">Check</button>
-
   <div id="result"></div>
 
   <script>
-    let data = {};
+    let data;
 
     async function loadData() {
-      const res = await fetch('data.json');
-      data = await res.json();
+      const response = await fetch('data.json');
+      data = await response.json();
     }
 
-    function checkShares() {
-      const code = document.getElementById('userCode').value.trim().toUpperCase();
+    async function checkShares() {
+      if (!data) await loadData();
+
+      const code = document.getElementById('userCode').value.trim();
       const userShares = data.users[code];
 
-      if (userShares) {
+      if (userShares !== undefined) {
         const shareValue = (data.totalPoolValue / data.totalShares) * userShares;
         document.getElementById('result').innerText =
           `You hold ${userShares} shares. Current value: $${shareValue.toFixed(2)}.`;
@@ -38,9 +32,6 @@
         document.getElementById('result').innerText = 'Invalid code. Please try again.';
       }
     }
-
-    loadData();
   </script>
-
 </body>
 </html>
